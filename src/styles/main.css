@@ -7,3 +7,13 @@ body {
   color: var(--color-text);
   background: var(--color-background);
 }
+
+/* Hides content visually while keeping it available to screen readers */
+.visually-hidden {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

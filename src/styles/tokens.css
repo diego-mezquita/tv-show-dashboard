@@ -1,17 +1,28 @@
 :root {
   /* Colors */
   --color-background: #002147;
+  --color-background-dark: #0f0f1a;
+  --color-background-light: #1a1a2e;
+  --color-background-lighter: #3a3a5a;
+  --color-background-empty: #97979f;
 
   /* Text colors */
   --color-text: #c2c4c8;
+  --color-text-secondary: #8888aa;
+  --color-text-warning: #f5c518;
+  --color-text-error: #e05a5a;
 
   /* Typography */
   --font-family-monospace: monospace, sans-serif;
 
   /* Font sizes */
-  --font-size-l: 2rem;
-  --font-size-m: 1rem;
   --font-size-s: 0.75rem;
+  --font-size-m: 1rem;
+  --font-size-l: 2rem;
+
+  /* Font weight */
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
 
   /* Size */
   --size-1: 0.5rem;
