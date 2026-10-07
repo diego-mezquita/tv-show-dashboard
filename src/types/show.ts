@@ -29,3 +29,20 @@ export interface Show {
 }
 
 export type ShowsByGenre = Record<string, Show[]>
+
+// Subset of the TVMaze `/shows/:id` response that the detail page reads.
+export interface TvMazeShowDetails extends TvMazeShow {
+  language: string | null
+  runtime: number | null
+  premiered: string | null
+  ended: string | null
+  summary: string | null
+}
+
+export interface ShowDetails extends Show {
+  language: string | null
+  runtime: number | null
+  premiered: string | null
+  ended: string | null
+  summary: string | null
+}
