@@ -1,4 +1,10 @@
-import type { Show, TvMazeSearchResult, TvMazeShow } from '@/types/show'
+import type {
+  Show,
+  ShowDetails,
+  TvMazeSearchResult,
+  TvMazeShow,
+  TvMazeShowDetails,
+} from '@/types/show'
 
 const BASE_URL = 'https://api.tvmaze.com'
 const CONCURRENCY = 3
@@ -20,6 +26,46 @@ export async function searchShows(query: string): Promise<Show[]> {
     rating: show.rating?.average ?? null,
     image: show.image?.medium ?? null,
   }))
+}
+
+export async function fetchShowById(id: number): Promise<ShowDetails> {
+  const response = await fetch(`${BASE_URL}/shows/${id}`)
+
+  if (response.status === 404) {
+    throw new Error('Show not found')
+  }
+
+  if (!response.ok) {
+    throw new Error(`HTTP error ${response.status}`)
+  }
+
+  const show: TvMazeShowDetails = await response.json()
+
+  return {
+    id: show.id,
+    url: show.url,
+    name: show.name,
+    genres: show.genres,
+    rating: show.rating?.average ?? null,
+    // The detail page shows a large poster
+    image: show.image?.original ?? null,
+    language: show.language,
+    runtime: show.runtime,
+    premiered: show.premiered,
+    ended: show.ended,
+    summary: toPlainText(show.summary),
+  }
+}
+
+// TVMaze summaries are HTML; rendering them with v-html would trust third-party markup
+function toPlainText(html: string | null): string | null {
+  if (!html) {
+    return null
+  }
+
+  const text = new DOMParser().parseFromString(html, 'text/html').body.textContent?.trim()
+
+  return text || null
 }
 
 /**

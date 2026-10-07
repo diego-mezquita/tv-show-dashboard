@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ShowCard from '@/components/ShowCard.vue'
+import router from '@/router'
 import type { Show } from '@/types/show'
 
 function buildShow(overrides: Partial<Show> = {}): Show {
@@ -16,10 +17,16 @@ function buildShow(overrides: Partial<Show> = {}): Show {
 }
 
 function mountShowCard(show: Show) {
-  return mount(ShowCard, { props: { show } })
+  return mount(ShowCard, { props: { show }, global: { plugins: [router] } })
 }
 
 describe('ShowCard', () => {
+  it('links to the show detail page', () => {
+    const wrapper = mountShowCard(buildShow())
+
+    expect(wrapper.get('a').attributes('href')).toBe('/shows/1')
+  })
+
   it('renders the show name', () => {
     const wrapper = mountShowCard(buildShow())
 
