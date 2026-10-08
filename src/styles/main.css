@@ -8,6 +8,10 @@ body {
   background: var(--color-background);
 }
 
+a {
+  text-decoration: none;
+}
+
 /* Hides content visually while keeping it available to screen readers */
 .visually-hidden {
   clip-path: inset(50%);
