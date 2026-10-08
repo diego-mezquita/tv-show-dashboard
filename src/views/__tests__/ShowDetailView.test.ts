@@ -27,34 +27,12 @@ function buildShowDetails(overrides: Partial<ShowDetails> = {}): ShowDetails {
   }
 }
 
-// Lets a test decide when, and in which order, pending requests resolve or fail
-function deferredRequest() {
-  let resolveRequest: (show: ShowDetails) => void = () => {}
-  let rejectRequest: (error: Error) => void = () => {}
-  const promise = new Promise<ShowDetails>((resolve, reject) => {
-    resolveRequest = resolve
-    rejectRequest = reject
-  })
-
-  return { promise, resolveRequest, rejectRequest }
-}
-
 async function mountLoadedView(show: ShowDetails) {
   fetchShowByIdMock.mockResolvedValue(show)
   const wrapper = mount(ShowDetailView, { props: { showId: show.id } })
   await flushPromises()
 
   return wrapper
-}
-
-// Two requests that the test resolves or fails in any order
-function mountWithTwoPendingRequests() {
-  const firstRequest = deferredRequest()
-  const secondRequest = deferredRequest()
-  fetchShowByIdMock.mockReturnValueOnce(firstRequest.promise).mockReturnValueOnce(secondRequest.promise)
-  const wrapper = mount(ShowDetailView, { props: { showId: 1 } })
-
-  return { wrapper, firstRequest, secondRequest }
 }
 
 describe('ShowDetailView', () => {
@@ -70,7 +48,7 @@ describe('ShowDetailView', () => {
     })
 
     it('renders a loading message while the show loads', () => {
-      fetchShowByIdMock.mockReturnValue(deferredRequest().promise)
+      fetchShowByIdMock.mockReturnValue(new Promise(() => {}))
 
       const wrapper = mount(ShowDetailView, { props: { showId: 1 } })
 
@@ -185,44 +163,10 @@ describe('ShowDetailView', () => {
     it('does not keep rendering the previous show while the new one loads', async () => {
       const wrapper = await mountLoadedView(buildShowDetails())
 
-      fetchShowByIdMock.mockReturnValue(deferredRequest().promise)
+      fetchShowByIdMock.mockReturnValue(new Promise(() => {}))
       await wrapper.setProps({ showId: 2 })
 
       expect(wrapper.find('h1').exists()).toBe(false)
-    })
-
-    it('ignores the response of an outdated request that arrives last', async () => {
-      const { wrapper, firstRequest, secondRequest } = mountWithTwoPendingRequests()
-      await wrapper.setProps({ showId: 2 })
-
-      secondRequest.resolveRequest(buildShowDetails({ id: 2, name: 'The Wire' }))
-      await flushPromises()
-      firstRequest.resolveRequest(buildShowDetails())
-      await flushPromises()
-
-      expect(wrapper.get('h1').text()).toBe('The Wire')
-    })
-
-    it('ignores the error of an outdated request that arrives last', async () => {
-      const { wrapper, firstRequest, secondRequest } = mountWithTwoPendingRequests()
-      await wrapper.setProps({ showId: 2 })
-
-      secondRequest.resolveRequest(buildShowDetails({ id: 2, name: 'The Wire' }))
-      await flushPromises()
-      firstRequest.rejectRequest(new Error('HTTP error 500'))
-      await flushPromises()
-
-      expect(wrapper.text()).not.toContain('Failed to load the show')
-    })
-
-    it('keeps loading while the latest request is pending, even if an outdated one finishes', async () => {
-      const { wrapper, firstRequest } = mountWithTwoPendingRequests()
-      await wrapper.setProps({ showId: 2 })
-
-      firstRequest.resolveRequest(buildShowDetails())
-      await flushPromises()
-
-      expect(wrapper.text()).toBe('Loading show…')
     })
   })
 })

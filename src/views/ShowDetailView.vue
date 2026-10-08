@@ -3,9 +3,8 @@
  * Show detail page. Fetches the show whenever `showId` changes (including on
  * initial navigation), since navigating between detail pages reuses this component.
  */
-import { ref, watch } from 'vue'
+import { useLatestRequest } from '@/composables/useLatestRequest'
 import { fetchShowById } from '@/services/tvmaze'
-import type { ShowDetails } from '@/types/show'
 
 interface ShowDetailViewProps {
   showId: number
@@ -13,39 +12,7 @@ interface ShowDetailViewProps {
 
 const props = defineProps<ShowDetailViewProps>()
 
-const show = ref<ShowDetails | null>(null)
-const isLoading = ref(false)
-const error = ref<string | null>(null)
-
-// Responses can arrive out of order when showId changes quickly; only the latest request may update the page
-let latestRequestId = 0
-
-async function loadShow(showId: number): Promise<void> {
-  latestRequestId = latestRequestId + 1
-  const requestId = latestRequestId
-
-  show.value = null
-  error.value = null
-  isLoading.value = true
-
-  try {
-    const loadedShow = await fetchShowById(showId)
-
-    if (requestId === latestRequestId) {
-      show.value = loadedShow
-    }
-  } catch (caughtError) {
-    if (requestId === latestRequestId) {
-      error.value = (caughtError as Error).message
-    }
-  } finally {
-    if (requestId === latestRequestId) {
-      isLoading.value = false
-    }
-  }
-}
-
-watch(() => props.showId, loadShow, { immediate: true })
+const { data: show, isLoading, error } = useLatestRequest(() => props.showId, fetchShowById)
 </script>
 
 <template>
