@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
+import { createPinia } from 'pinia'
 import ShowDetailView from '@/views/ShowDetailView.vue'
+import ShowRecommendations from '@/components/ShowRecommendations.vue'
+import router from '@/router'
 import { fetchShowById } from '@/services/tvmaze'
 import type { ShowDetails } from '@/types/show'
 
@@ -9,6 +12,11 @@ vi.mock('@/services/tvmaze', () => ({
 }))
 
 const fetchShowByIdMock = vi.mocked(fetchShowById)
+
+// The recommendations read the shows store and render links, so the view needs Pinia and the router
+function mountShowDetailView(showId: number) {
+  return mount(ShowDetailView, { props: { showId }, global: { plugins: [createPinia(), router] } })
+}
 
 function buildShowDetails(overrides: Partial<ShowDetails> = {}): ShowDetails {
   return {
@@ -29,7 +37,7 @@ function buildShowDetails(overrides: Partial<ShowDetails> = {}): ShowDetails {
 
 async function mountLoadedView(show: ShowDetails) {
   fetchShowByIdMock.mockResolvedValue(show)
-  const wrapper = mount(ShowDetailView, { props: { showId: show.id } })
+  const wrapper = mountShowDetailView(show.id)
   await flushPromises()
 
   return wrapper
@@ -50,7 +58,7 @@ describe('ShowDetailView', () => {
     it('renders a loading message while the show loads', () => {
       fetchShowByIdMock.mockReturnValue(new Promise(() => {}))
 
-      const wrapper = mount(ShowDetailView, { props: { showId: 1 } })
+      const wrapper = mountShowDetailView(1)
 
       expect(wrapper.text()).toContain('Loading show…')
     })
@@ -118,6 +126,14 @@ describe('ShowDetailView', () => {
       expect(wrapper.text()).toContain('Under the Dome is the story of a small town.')
     })
 
+    it('renders the recommendations for the show', async () => {
+      const show = buildShowDetails()
+
+      const wrapper = await mountLoadedView(show)
+
+      expect(wrapper.getComponent(ShowRecommendations).props('show')).toEqual(show)
+    })
+
     it('does not render a summary when the show has none', async () => {
       const wrapper = await mountLoadedView(buildShowDetails({ summary: null }))
 
@@ -129,7 +145,7 @@ describe('ShowDetailView', () => {
     it('renders the error when the show fails to load', async () => {
       fetchShowByIdMock.mockRejectedValue(new Error('Show not found'))
 
-      const wrapper = mount(ShowDetailView, { props: { showId: 999999 } })
+      const wrapper = mountShowDetailView(999999)
       await flushPromises()
 
       expect(wrapper.text()).toBe('Failed to load the show: Show not found')
@@ -137,7 +153,7 @@ describe('ShowDetailView', () => {
 
     it('removes the error when another show loads successfully', async () => {
       fetchShowByIdMock.mockRejectedValueOnce(new Error('Show not found'))
-      const wrapper = mount(ShowDetailView, { props: { showId: 999999 } })
+      const wrapper = mountShowDetailView(999999)
       await flushPromises()
 
       fetchShowByIdMock.mockResolvedValue(buildShowDetails())

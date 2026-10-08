@@ -3,6 +3,7 @@
  * Show detail page. Fetches the show whenever `showId` changes (including on
  * initial navigation), since navigating between detail pages reuses this component.
  */
+import ShowRecommendations from '@/components/ShowRecommendations.vue'
 import { useLatestRequest } from '@/composables/useLatestRequest'
 import { fetchShowById } from '@/services/tvmaze'
 
@@ -66,6 +67,8 @@ const { data: show, isLoading, error } = useLatestRequest(() => props.showId, fe
       </div>
 
       <p v-if="show.summary" class="show-detail__summary">{{ show.summary }}</p>
+
+      <ShowRecommendations :show="show" />
     </template>
   </article>
 </template>
