@@ -2,7 +2,6 @@
 
 body {
   margin: 0;
-  overflow-x: hidden;
   font-family: var(--font-family-monospace), serif;
   color: var(--color-text);
   background: var(--color-background-dark);

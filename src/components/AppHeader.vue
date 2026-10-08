@@ -43,6 +43,7 @@ function goToSearchResults(query: string) {
   align-items: center;
   padding: var(--size-2);
   background-color: var(--color-background);
+  z-index: 1;
 }
 
 .home-link {

@@ -48,6 +48,7 @@ defineProps<ShowCardProps>()
 }
 
 .show-card {
+  position: relative;
   height: 100%;
   box-sizing: border-box;
   display: flex;

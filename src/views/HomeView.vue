@@ -46,7 +46,7 @@ const store = useShowsStore()
 }
 
 .home__title {
-  padding: 0 var(--size-3) var(--size-4);
+  padding: 0 var(--size-2) var(--size-4);
 }
 
 @media (min-width: 576px) {
