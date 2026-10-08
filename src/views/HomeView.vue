@@ -1,34 +1,39 @@
 <script setup lang="ts">
-import GenreList from '@/components/GenreList.vue'
+import HorizontalShowList from '@/components/HorizontalShowList.vue'
 import { useShowsStore } from '@/store/shows'
 
 const store = useShowsStore()
 </script>
 
 <template>
-  <section class="main">
+  <section class="home">
     <template v-if="store.isInitialLoaded">
-      <h1 class="main__title">Top rated TV shows by genre</h1>
-      <GenreList
+      <h1 class="home__title">Top rated TV shows by genre</h1>
+      <HorizontalShowList
         v-for="(shows, genre) in store.shows"
         :key="genre"
-        :genre="genre"
+        :title="genre"
         :shows="shows"
+        class="home__show"
       />
     </template>
-    <div v-else-if="store.error" class="main__error">Failed to load TV shows: {{ store.error }}</div>
-    <div v-else class="main__loading">Loading shows…</div>
+    <div v-else-if="store.error" class="home__error">Failed to load TV shows: {{ store.error }}</div>
+    <div v-else class="home__loading">Loading shows…</div>
   </section>
 </template>
 
 <style scoped>
-.main {
+.home {
   background: var(--color-background-dark);
   padding-top: var(--size-3);
 }
 
-.main__loading,
-.main__error {
+.home__show {
+  padding: 0 var(--size-2) calc(var(--size-2) + var(--size-1));
+}
+
+.home__loading,
+.home__error {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,17 +41,17 @@ const store = useShowsStore()
   height: calc(100vh - calc(var(--size-2) * 7));
 }
 
-.main__error {
+.home__error {
   color: var(--color-text-error);
 }
 
-.main__title {
+.home__title {
   padding: 0 var(--size-3) var(--size-4);
 }
 
 @media (min-width: 576px) {
-  .main__loading,
-  .main__error {
+  .home__loading,
+  .home__error {
     height: calc(100vh - calc(var(--size-2) * 10));
   }
 }
