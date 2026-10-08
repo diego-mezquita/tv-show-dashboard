@@ -68,7 +68,7 @@ const { data: show, isLoading, error } = useLatestRequest(() => props.showId, fe
 
       <p v-if="show.summary" class="show-detail__summary">{{ show.summary }}</p>
 
-      <ShowRecommendations :show="show" />
+      <ShowRecommendations :show="show" class="show-detail__recommendations" />
     </template>
   </article>
 </template>
@@ -163,6 +163,10 @@ const { data: show, isLoading, error } = useLatestRequest(() => props.showId, fe
   margin-top: var(--size-4);
   line-height: 1.7;
   color: var(--color-text);
+}
+
+.show-detail__recommendations {
+  margin-top: var(--size-4);
 }
 
 @media (min-width: 576px) {
