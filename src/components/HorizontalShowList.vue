@@ -3,21 +3,21 @@ import { useId } from 'vue'
 import ShowCard from '@/components/ShowCard.vue'
 import type { Show } from '@/types/show'
 
-interface GenreListProps {
-  genre: string
+interface HorizontalShowListProps {
+  title: string
   shows: Show[]
 }
 
-defineProps<GenreListProps>()
+defineProps<HorizontalShowListProps>()
 
 const titleId = useId()
 </script>
 
 <template>
-  <section class="genre-row" :aria-labelledby="titleId">
-    <h2 :id="titleId" class="genre-row__title">{{ genre }}</h2>
-    <ul class="genre-row__shows" :aria-labelledby="titleId">
-      <li v-for="show in shows" :key="show.id" class="genre-row__card">
+  <section class="horizontal-show-list" :aria-labelledby="titleId">
+    <h2 :id="titleId" class="horizontal-show-list__title">{{ title }}</h2>
+    <ul class="horizontal-show-list__shows" :aria-labelledby="titleId">
+      <li v-for="show in shows" :key="show.id" class="horizontal-show-list__card">
         <ShowCard :show="show" />
       </li>
     </ul>
@@ -25,11 +25,7 @@ const titleId = useId()
 </template>
 
 <style scoped>
-.genre-row {
-  padding: 0 16px 24px;
-}
-
-.genre-row__title {
+.horizontal-show-list__title {
   font-size: var(--font-size-m);
   font-weight: var(--font-weight-bold);
   margin: var(--size-2) 0 var(--size-3);
@@ -37,7 +33,7 @@ const titleId = useId()
   text-transform: uppercase;
 }
 
-.genre-row__shows {
+.horizontal-show-list__shows {
   display: flex;
   gap: var(--size-2);
   overflow-x: auto;
@@ -48,7 +44,7 @@ const titleId = useId()
   scrollbar-color: var(--color-background-lighter) transparent;
 }
 
-.genre-row__card {
+.horizontal-show-list__card {
   flex: 0 0 var(--size-7);
   min-width: 0;
 }
