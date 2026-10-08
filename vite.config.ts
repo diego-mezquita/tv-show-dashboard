@@ -7,7 +7,14 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          // Vue's built-in HTML tag list does not include <search> native element even in v3.5
+          isCustomElement: (tag) => tag === 'search',
+        },
+      },
+    }),
     vueDevTools(),
   ],
   resolve: {
