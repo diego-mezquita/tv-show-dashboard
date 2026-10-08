@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { mount } from '@vue/test-utils'
 import GenreList from '@/components/GenreList.vue'
 import ShowCard from '@/components/ShowCard.vue'
+import router from '@/router'
 import type { Show } from '@/types/show'
 
 function buildShow(id: number, name: string): Show {
@@ -18,7 +19,7 @@ function buildShow(id: number, name: string): Show {
 const dramaShows = [buildShow(1, 'Breaking Bad'), buildShow(2, 'The Wire'), buildShow(3, 'Mad Men')]
 
 function mountGenreList(genre: string, shows: Show[]) {
-  return mount(GenreList, { props: { genre, shows } })
+  return mount(GenreList, { props: { genre, shows }, global: { plugins: [router] } })
 }
 
 describe('GenreList', () => {
