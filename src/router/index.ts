@@ -15,6 +15,12 @@ const router = createRouter({
       props: (route) => ({ showId: Number(route.params.id) }),
     },
     {
+      path: '/search',
+      name: 'search',
+      component: () => import('@/views/SearchResultsView.vue'),
+      props: (route) => ({ query: typeof route.query.q === 'string' ? route.query.q : '' }),
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/'
     }
