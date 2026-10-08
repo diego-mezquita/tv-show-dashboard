@@ -1,44 +1,57 @@
 <script setup lang="ts">
 /**
- * Search input with an icon. On submit, emits the trimmed query and clears the input.
+ * Search input with an icon. On submit, emits the trimmed query.
  * Empty (or whitespace-only) queries are ignored.
  */
 
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import SearchIcon from '@/components/icons/SearchIcon.vue'
 
 interface SearchFieldProps {
-  /** Initial input value. Only read on mount; later changes are not synced. */
+  /** Current search query. The input follows it whenever it changes, e.g. on back/forward navigation. */
   query?: string
 }
 
-export interface SearchFieldEmits {
+interface SearchFieldEmits {
   /** Fired on form submit with the trimmed, non-empty query. */
   search: [query: string]
 }
 
-const props = defineProps<SearchFieldProps>()
+const props = withDefaults(defineProps<SearchFieldProps>(), { query: '' })
+const emit = defineEmits<SearchFieldEmits>()
 
 const searchQuery = ref(props.query)
 
+watch(
+  () => props.query,
+  (query) => {
+    searchQuery.value = query
+  },
+)
+
 function handleSubmit() {
-  // Emits 'search' with SearchFieldEmits containing the search criteria
-  // (empty or whitespace-only queries are ignored - do not emit!)
-  // Show search result panel, if not shown already
+  const trimmedQuery = searchQuery.value.trim()
+
+  if (!trimmedQuery) {
+    return
+  }
+
+  searchQuery.value = trimmedQuery
+  emit('search', trimmedQuery)
 }
 </script>
 
 <template>
-  <search  class="search">
-    <form id="search-form" class="search__form" @submit.prevent="handleSubmit">
-      <SearchIcon class="search__icon" />
+  <search class="search">
+    <form class="search__form" @submit.prevent="handleSubmit">
+      <SearchIcon class="search__icon" aria-hidden="true" />
       <input
         v-model="searchQuery"
         type="search"
         class="search__input"
         placeholder="Search TV shows by name..."
         name="search"
-        aria-label="Search"
+        aria-label="Search TV shows by name"
       />
     </form>
   </search>
@@ -73,6 +86,7 @@ function handleSubmit() {
   height: var(--size-3);
   border: none;
   flex-grow: 1;
+  color: inherit;
   background: transparent;
   padding: 0 var(--size-1);
   outline: none;

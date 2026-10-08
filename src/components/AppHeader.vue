@@ -4,17 +4,33 @@
  * It is always at the very top of the screen for better UX.
  */
 
+import { computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import HomeIcon from '@/components/icons/HomeIcon.vue'
 import SearchField from '@/components/SearchField.vue'
+
+const route = useRoute()
+const router = useRouter()
+
+// The URL is the source of truth, so the field shows the right query after back/forward or a page reload
+const currentQuery = computed(() => {
+  const query = route.name === 'search' ? route.query.q : undefined
+
+  return typeof query === 'string' ? query : ''
+})
+
+function goToSearchResults(query: string) {
+  router.push({ name: 'search', query: { q: query } })
+}
 </script>
 
 <template>
-  <div class="app-header">
-    <RouterLink to="/" class="home-link">
-      <HomeIcon />
+  <header class="app-header">
+    <RouterLink to="/" class="home-link" aria-label="Home">
+      <HomeIcon aria-hidden="true" />
     </RouterLink>
-    <SearchField class="search-input"/>
-  </div>
+    <SearchField class="search-input" :query="currentQuery" @search="goToSearchResults" />
+  </header>
 </template>
 
 <style scoped>
@@ -26,6 +42,7 @@ import SearchField from '@/components/SearchField.vue'
   display: flex;
   align-items: center;
   padding: var(--size-2);
+  background-color: var(--color-background);
 }
 
 .home-link {
