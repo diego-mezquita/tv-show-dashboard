@@ -33,6 +33,7 @@ const titleId = useId()
   font-size: var(--font-size-m);
   font-weight: var(--font-weight-bold);
   margin: var(--size-2) 0 var(--size-3);
+  padding-left: calc(var(--size-1) / 2);
   text-transform: uppercase;
 }
 
@@ -41,7 +42,7 @@ const titleId = useId()
   gap: var(--size-2);
   overflow-x: auto;
   margin: 0;
-  padding: 0 0 var(--size-2);
+  padding: calc(var(--size-1) / 2) calc(var(--size-1) / 2) var(--size-2);
   list-style: none;
   scrollbar-width: thin;
   scrollbar-color: var(--color-background-lighter) transparent;
@@ -49,5 +50,6 @@ const titleId = useId()
 
 .genre-row__card {
   flex: 0 0 var(--size-7);
+  min-width: 0;
 }
 </style>

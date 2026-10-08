@@ -25,7 +25,6 @@ const store = useShowsStore()
 .main {
   background: var(--color-background-dark);
   padding-top: var(--size-3);
-  height: calc(100% - calc(var(--size-3) * 5))
 }
 
 .main__loading,
@@ -34,21 +33,21 @@ const store = useShowsStore()
   align-items: center;
   justify-content: center;
   font-size: var(--font-size-m);
-  height: calc(100vh - calc(var(--size-3) * 5));
+  height: calc(100vh - calc(var(--size-2) * 7));
 }
 
 .main__error {
   color: var(--color-text-error);
 }
 
-@media (min-width: 576px) {
-  .main {
-    height: calc(100% - calc(var(--size-3) * 9));
-  }
+.main__title {
+  padding: 0 var(--size-3) var(--size-4);
+}
 
+@media (min-width: 576px) {
   .main__loading,
   .main__error {
-    height: calc(100vh - calc(var(--size-3) * 9));
+    height: calc(100vh - calc(var(--size-2) * 10));
   }
 }
 </style>

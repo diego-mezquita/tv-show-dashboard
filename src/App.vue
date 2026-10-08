@@ -5,7 +5,9 @@ import AppHeader from '@/components/AppHeader.vue'
 
 <template>
   <AppHeader />
-  <RouterView class="main-view" />
+  <main class="main-view">
+    <RouterView />
+  </main>
 </template>
 
 <style scoped>
@@ -15,7 +17,7 @@ import AppHeader from '@/components/AppHeader.vue'
 
 @media (min-width: 576px) {
   .main-view {
-    margin-top: var(--size-7);
+    margin-top: calc(var(--size-2) * 8);
   }
 }
 </style>

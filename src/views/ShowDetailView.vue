@@ -72,7 +72,7 @@ const { data: show, isLoading, error } = useLatestRequest(() => props.showId, fe
 
 <style scoped>
 .show-detail {
-  max-width: calc(var(--size-3) * 60);
+  max-width: calc(var(--size-2) * 60);
   margin: 0 auto;
   padding: var(--size-4);
 }
@@ -100,7 +100,7 @@ const { data: show, isLoading, error } = useLatestRequest(() => props.showId, fe
 }
 
 .show-detail__image {
-  width: calc(var(--size-3) * 20);
+  width: calc(var(--size-2) * 20);
   flex-shrink: 0;
   border-radius: var(--radius-m);
   object-fit: cover;
@@ -111,7 +111,7 @@ const { data: show, isLoading, error } = useLatestRequest(() => props.showId, fe
   align-items: center;
   justify-content: center;
   background: var(--color-background-empty);
-  height: calc(var(--size-3) * 26);
+  height: calc(var(--size-2) * 26);
   border-radius: var(--radius-m);
 }
 

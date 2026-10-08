@@ -61,11 +61,11 @@ const results = computed(() => data.value ?? [])
 }
 
 .search-results__results {
-  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--size-7), 1fr));
+  gap: var(--size-2);
   margin: 0;
   padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: var(--size-2);
+  list-style: none;
 }
 </style>

@@ -37,7 +37,8 @@ defineProps<ShowCardProps>()
 <style scoped>
 .show-card-link {
   display: block;
-  //color: inherit;
+  height: 100%;
+  color: inherit;
   border-radius: var(--radius-m);
 }
 
@@ -47,6 +48,8 @@ defineProps<ShowCardProps>()
 }
 
 .show-card {
+  height: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -62,7 +65,7 @@ defineProps<ShowCardProps>()
 }
 
 .show-card__image {
-  width: calc(var(--size-3) * 13);
+  width: 100%;
   aspect-ratio: 2 / 3;
   object-fit: cover;
   border-radius: var(--radius-s);

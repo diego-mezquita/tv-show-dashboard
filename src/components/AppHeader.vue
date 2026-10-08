@@ -48,6 +48,7 @@ function goToSearchResults(query: string) {
 .home-link {
   width: var(--size-4);
   height: var(--size-4);
+  padding-right: var(--size-1);
   color: currentColor;
   flex-shrink: 0;
 }
