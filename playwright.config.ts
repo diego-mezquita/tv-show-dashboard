@@ -4,9 +4,9 @@ import { defineConfig, devices } from '@playwright/test'
 // See https://playwright.dev/docs/test-configuration
 export default defineConfig({
   testDir: './e2e',
-  // Tests use the real TVMaze API, which allows ~20 requests per 10 seconds, so they run one at a time
-  fullyParallel: false,
-  workers: 1,
+  fullyParallel: true,
+  // Locally Playwright's default (half the CPU cores); one worker on CI for stable, reproducible runs
+  workers: process.env.CI ? 1 : undefined,
   // Real network calls are slower than the defaults allow for
   timeout: 60_000,
   expect: { timeout: 15_000 },
