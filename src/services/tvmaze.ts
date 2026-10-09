@@ -7,7 +7,7 @@ import type {
 } from '@/types/show'
 
 const BASE_URL = 'https://api.tvmaze.com'
-const CONCURRENCY = 3
+const CONCURRENCY = 10
 
 export async function searchShows(query: string): Promise<Show[]> {
   const response = await fetch(`${BASE_URL}/search/shows?q=${encodeURIComponent(query)}`)
