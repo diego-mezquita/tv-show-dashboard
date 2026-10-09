@@ -9,7 +9,7 @@ export const useShowsStore = defineStore('shows', () => {
   const isInitialLoaded = ref(false)
   const error = ref<string | null>(null)
 
-  const PAGES_TO_FETCH = 15
+  const PAGES_TO_FETCH = 500
   const TOP_SHOWS_PER_GENRE = 10
 
   async function loadShows(): Promise<void> {
